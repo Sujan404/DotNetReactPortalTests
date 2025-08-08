@@ -27,7 +27,7 @@ namespace DotNetReactPortal.Tests
             var controller = new AuthController(context);
             var signUpRequest = new SignUpRequest
             {
-                Email = "test@example.com",
+                Email = "test1@example.com",
                 Password = "secure123"
             };
 
@@ -67,5 +67,35 @@ namespace DotNetReactPortal.Tests
             Assert.IsNotNull(badRequest);
             Assert.AreEqual(400, badRequest.StatusCode);
         }
+
+        [TestMethod]
+        public async Task Login_ReturnsBadRequest_IfPasswordWrong()
+        {
+            // Arrange
+            var context = GetInMemoryDbContext();
+            context.Users.Add(new User
+            {
+                Email = "duplicate@example.com",
+                Password = "newpassword"
+            });
+            await context.SaveChangesAsync();
+
+            var controller = new AuthController(context);
+            var loginRequest = new LoginRequest
+            {
+                Email = "duplicate@example.com",
+                Password = "newpassword1"
+            };
+
+            // Act
+            var result = controller.Login(loginRequest);
+
+            // Assert
+            var unauthorized = result as UnauthorizedObjectResult;
+            Assert.IsNotNull(unauthorized);
+            Assert.AreEqual(401, unauthorized.StatusCode);
+
+        }
+
     }
 }
