@@ -73,12 +73,15 @@ namespace DotNetReactPortal.Tests
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            context.Users.Add(new User
-            {
-                Email = "duplicate@example.com",
-                Password = "newpassword"
-            });
-            await context.SaveChangesAsync();
+
+            // removing add user options since it is using same database where the values are already input via register
+            // function in above test method
+            //context.Users.Add(new User
+            //{
+            //    Email = "duplicate@example.com",
+            //    Password = "newpassword"
+            //});
+            //context.SaveChanges();
 
             var controller = new AuthController(context);
             var loginRequest = new LoginRequest
