@@ -17,7 +17,7 @@ namespace DotNetReactPortal.Tests
         private ApplicationDbContext GetInMemoryDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())  // generating new database to each new unit test to create isolation from other test method
                 .Options;
             return new ApplicationDbContext(options);
         }
